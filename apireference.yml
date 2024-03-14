@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: Ping API Documentation
+  version: 1.0.0
+paths:
+  /ping:
+    post:
+      summary: Ping the platform
+      description: |
+        The `PING` method lets you verify the connection to our platform.
+      operationId: ping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PingRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PingRequest'
+      responses:
+        '200':
+          description: Successful ping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingResponse'
+components:
+  schemas:
+    PingRequest:
+      type: object
+      properties:
+        language:
+          type: string
+          description: Language used in the request
+          minLength: 2
+          maxLength: 2
+          example: en
+        command:
+          type: string
+          description: Set `PING`
+          maxLength: 32
+          example: PING
+        test:
+          type: boolean
+          description: Set `true` if the request is in test mode. Otherwise, set `false`.
+          example: false
+        merchant:
+          $ref: '#/components/schemas/Merchant'
+    PingResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The response code of the transaction
+          example: SUCCESS
+        error:
+          type: string
+          description: The error message associated if an error occurred
+          maxLength: 2048
+        transactionResponse:
+          $ref: '#/components/schemas/TransactionResponse'
+    Merchant:
+      type: object
+      properties:
+        apiLogin:
+          type: string
+          description: User or login provided by PayU
+          minLength: 12
+          maxLength: 32
+          example: pRRXKOl8ikMmt9u
+        apiKey:
+          type: string
+          description: Password provided by PayU
+          minLength: 6
+          maxLength: 32
+          example: 4Vj8eK4rloUd272L48hsrarnUA
+    TransactionResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          description: The response of the PING method if an error occurred
+          maxLength: 2048
